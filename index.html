@@ -603,6 +603,12 @@
 
     function rng() { return glyphs[Math.floor(Math.random() * glyphs.length)]; }
 
+    // Force repaint after textContent change to fix background-clip:text rendering bug
+    function setText(text) {
+      pre.textContent = text;
+      void pre.offsetHeight;
+    }
+
     function render(front) {
       pre.textContent = lines.map(line => {
         let out = '';
@@ -623,7 +629,7 @@
       if (col <= maxLen + scrambleWindow) {
         setTimeout(revealStep, colDelay);
       } else {
-        pre.textContent = original;
+        setText(original);
         scheduleGlitch();
       }
     }
@@ -650,8 +656,8 @@
         return chars.join('');
       });
 
-      pre.textContent = glitched.join('\n');
-      setTimeout(() => { pre.textContent = original; }, Math.random() * 140 + 80);
+      setText(glitched.join('\n'));
+      setTimeout(() => { setText(original); }, Math.random() * 140 + 80);
     }
 
     function scheduleGlitch() {
