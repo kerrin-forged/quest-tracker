@@ -57,10 +57,27 @@
     }
 
     .ascii-wrap {
+      position: relative;
       display: flex;
       justify-content: center;
       overflow: hidden;
       margin-bottom: var(--sp-2);
+    }
+
+    .ascii-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, #c8f135, #ff3cac, #00e5ff, #c8f135);
+      background-size: 300% 100%;
+      animation: color-sweep 8s linear infinite;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes color-sweep {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
     }
 
     .ascii-art {
@@ -70,17 +87,7 @@
       white-space: pre;
       flex-shrink: 0;
       transform: skewX(-6deg);
-      background: linear-gradient(90deg, #c8f135, #ff3cac, #00e5ff, #c8f135);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: color-sweep 8s linear infinite;
-    }
-
-    @keyframes color-sweep {
-      0%   { background-position: 0% 50%; }
-      100% { background-position: 300% 50%; }
+      color: #ffffff;
     }
 
     .header-meta {
@@ -360,6 +367,7 @@
 <header>
   <span class="header-meta">Gal'Dor Campaign</span>
   <div class="ascii-wrap">
+    <div class="ascii-gradient"></div>
     <pre class="ascii-art">      * ***         ***** *    **        ***** **          *******      ****           *       *******
     *  ****      ******  *  *****     ******  **** *     *       ***   *  *************      *       ***
    *  *  ***    **   *  *     *****  **   *  * ****     *         **  *     *********       *         **
@@ -603,10 +611,8 @@
 
     function rng() { return glyphs[Math.floor(Math.random() * glyphs.length)]; }
 
-    // Force repaint after textContent change to fix background-clip:text rendering bug
     function setText(text) {
       pre.textContent = text;
-      void pre.offsetHeight;
     }
 
     function render(front) {
